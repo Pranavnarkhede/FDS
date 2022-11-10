@@ -10,18 +10,24 @@ struct node* head;
 
 void create()
 {
-   int n,d;
-   printf("\nEnter the number of nodes: ");
-   scanf("%d", &n);
-   struct node* new,*temp;
-   temp=head;
-      for (int i = 2; i <= n; i++) 
+        int n;
+        printf("\nEnter the number of nodes: ");
+        scanf("%d", &n);
+            int d;
+            struct node* new,*temp;
+            temp=head;
+           
+         for (int i = 2; i <= n; i++) 
            {
+            
             new= (struct node*)malloc(sizeof(struct node));
-            printf("\nEnter data:");
-            scanf("%d", &d);
+            printf("\nEnter value in %d node:\n",i);
+            printf("Value=\n");
+            scanf("%d",&d);
+            new->next=NULL;
             new->data= d;
-            temp = new;;
+            temp->next = new;
+             temp=temp->next;
             }
 }
     
@@ -29,9 +35,11 @@ void create()
 void display()
 {
     struct node* temp;
-    temp = head;
+
+        temp = head;
         while (temp != NULL)
          {
+
             printf("Data = %d\n", temp->data);
             temp = temp->next;
         }
@@ -132,7 +140,12 @@ void deleteIntermediate()
   p->next=temp->next;
   free(temp);
     
-}
+       
+    }
+
+  
+ 
+
 void sort()
 {
     struct node* p = head;
@@ -153,10 +166,15 @@ void sort()
             p = p->next;
         }
 }
+
+
 void reverse()
 {
     struct node *t1, *t2, *temp;
-      while (head!= NULL) {
+
+  
+
+    while (head!= NULL) {
             t2 = head->next;
             head->next = t1;
             t1 = head;
@@ -164,9 +182,10 @@ void reverse()
         }
         head= t1;
        temp = head;
+       printf("Reversed linked "
+               "list is : ");
   
-       printf("Reversed linked: ");
-       while (temp != NULL) {
+        while (temp != NULL) {
             printf("%d ", temp->data);
             temp = temp->next;
         }
