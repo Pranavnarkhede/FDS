@@ -14,6 +14,8 @@ void deleteM(struct abc*);
 void deleteP(struct abc*);
 void deleteS(struct abc*);
 void deleteM(struct abc*);
+int count(struct abc*);
+void reverse(struct abc*);
 
 
 
@@ -62,7 +64,7 @@ void main()
         {
             case 1:insertM(head);
                    break;
-            // case 2:deleteM(head);
+            case 2:deleteM(head);
                  break;
             case 3:deleteS(head);
                   printf("Secretary node deleted.");
@@ -70,10 +72,10 @@ void main()
             case 4:deleteP(head);
                    printf("President node deleted.");
                    break;
-            // case 5:count(head);
-            //       break;
-            // case 6:reverse(head);
-            //       break;
+            case 5:printf("Total members in group=%d",count(head));
+                  break;
+            case 6:reverse(head);
+                  break;
              case 7:display(head);
                     break;
           }
@@ -83,7 +85,7 @@ void main()
 void insertM(struct abc*head)
 {
     struct abc * new,*temp;
-    temp=head->next;
+    temp=head;
  new=(struct abc *)malloc(sizeof(struct abc));
     printf("Enter name:");
     scanf(" %s",new->name);
@@ -91,18 +93,16 @@ void insertM(struct abc*head)
     scanf("%d",&new->prn);
     new->next=NULL;
     new->prev=NULL;
-    head->next=new;
-    new->prev=head;
-    temp->prev=new;
-    new->next=temp;
+    new->next=temp->next;
+    temp->next=new;
+    new->prev=temp;
     
 }
 void deleteP(struct abc* head)
 {
     struct abc*temp;
-    temp=head;
-    head=head->next;
-    free(temp);
+    temp=head->next;
+    free(head);
 }
 void deleteS(struct abc*head)
 {
@@ -117,20 +117,55 @@ void deleteS(struct abc*head)
 }
 void deleteM(struct abc*head)
 {
-    struct abc*p,q;
+    struct abc*p,*q;
     char ch[10];
     p=head;
-    printf("Enter memeber name to be deleted:");
+    printf("Enter member name to be deleted:");
     scanf(" %s",ch);
     while(ch!=p->name)
     {
         q=p;
-        p=p->next
+        p=p->next;
     }
     q->next=p->next;
     (p->next)->prev=q;
     p->prev=NULL;
-    P->next=NULL;
+    p->next=NULL;
     
 }
+int count(struct abc*head)
+{
+       struct abc *temp;
+       temp=head;
+       int count;
+       while(temp->next!=NULL)
+       {
+              count++;
+       }
+       return count;
+}
+void reverse(struct abc *head)
+{
+   struct abc*current,*temp;
+
+    current = head;
+    while(current != NULL)
+    {
+        temp = current->next;
+        current->next = current->prev;
+        current->prev = temp;
+        current = temp;
+    }
+    if(temp->prev==NULL)
+    {
+       head=temp;
+    }
+printf("LIST REVERSED SUCCESSFULLY.\n");
+
+}
+
+
+
+
+
 
