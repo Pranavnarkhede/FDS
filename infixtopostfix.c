@@ -15,6 +15,7 @@ void push(char element)
     struct stack *new;
     new=(struct stack *)malloc(sizeof(struct stack));
     new->data=element;
+    new->next=NULL;
     if(top==NULL)
     {
         top=new;
@@ -28,7 +29,6 @@ char pop()
 {
     char element; 
     struct stack *temp;
-    temp=top;
     if(top==NULL)
     {
         printf("stack is empty");
@@ -65,13 +65,11 @@ int precedence(char c)
             }
     
     
-}        
-void main()
+}   
+void infix_to_postfix(char infix[20])
 {
-    char infix[20],postfix[20];
-    printf("Enter Infix Expression:");
-    scanf(" %s",infix);
-    int i=0,j=0;
+    char postfix[20];
+     int i=0,j=0;
     while(infix[i]!='\0')
     {
         if(isalnum(infix[i]))
@@ -84,6 +82,7 @@ void main()
             if(top==NULL)
             {
                 push(infix[i]);
+                
             }
             else
             {
@@ -93,8 +92,9 @@ while(precedence(infix[i])<=precedence(top->data) && top!=NULL)
                     j++;
                 }
                 push(infix[i]);
-      }      
-    }
+
+            }      
+        }
     i++;
 }    
 while(top!=NULL)
@@ -102,10 +102,18 @@ while(top!=NULL)
         postfix[j]=pop();
         j++;
     }
-    postfix[j++]='\0';
-  while(postfix[j]!='\0')
-  {
-      printf(" %s",postfix[j]);
-      j++;
-  }
-}
+    postfix[j]='\0';
+
+printf("%s",postfix);
+
+
+}    
+int main()
+{
+    char infix[20],postfix[20];
+    printf("Enter Infix Expression:");
+    scanf(" %s",infix);
+    infix_to_postfix(infix);
+
+    return 0;
+} 
