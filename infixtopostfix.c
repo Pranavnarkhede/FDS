@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#include<limits.h>
 #include<ctype.h>
 
 struct stack
@@ -9,6 +11,8 @@ struct stack
 };
 
 struct stack * top=NULL;
+int s[20];
+int top1=-1;
 
 void push(char element)
 {
@@ -65,11 +69,62 @@ int precedence(char c)
             }
     
     
-}   
-void infix_to_postfix(char infix[20])
+}  
+void push1(int n3)
 {
-    char postfix[20];
-     int i=0,j=0;
+top1=top1+1;
+s[top1]=n3;
+}
+int pop1()
+{
+int num=s[top1];
+top1--;
+return num;
+}
+void evaluate(char postfix[20])
+{
+  int i=0;
+  int result,n1,n2,n3;
+  while(postfix[i]!='\0')
+  {
+    if(isdigit(postfix[i]))
+     {
+    n3=postfix[i]-48;
+   push1(n3);
+    }
+else
+{
+n1=pop();
+n2=pop1();
+  switch(postfix[i])
+{
+case '^':result=n2^n1;
+         push(result);
+         break;
+case '*':result=n2*n1;
+         push(result);
+         break;
+case '/':result=n2/n1;
+         push(result);
+         break;
+case '+':result=n2+n1;
+         push(result);
+         break;
+case '-':result=n2-n1;
+         push(result);
+         break;
+  }
+  }
+}
+i++;
+}
+prinf("Evaluation of %s is %d",postfix,pop1());
+int main()
+{
+    char infix[20],postfix[20];
+    printf("Enter Infix Expression:");
+    scanf(" %s",infix);
+    int i=0,j=0;
     while(infix[i]!='\0')
     {
         if(isalnum(infix[i]))
@@ -102,18 +157,13 @@ while(top!=NULL)
         postfix[j]=pop();
         j++;
     }
-    postfix[j]='\0';
+    postfix[j++]='\0';
 
 printf("%s",postfix);
 
+ evaluate(postfix);
 
-}    
-int main()
-{
-    char infix[20],postfix[20];
-    printf("Enter Infix Expression:");
-    scanf(" %s",infix);
-    infix_to_postfix(infix);
+
 
     return 0;
-} 
+}
