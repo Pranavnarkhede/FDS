@@ -1,169 +1,160 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<limits.h>
-#include<ctype.h>
 
-struct stack
+#include<stdio.h>
+#include<ctype.h>
+#include<stdlib.h>
+#include<math.h>
+struct node 
 {
     char data;
-    struct stack *next;
-};
+    struct node *next;
+}*top=NULL;
 
-struct stack * top=NULL;
-int s[20];
-int top1=-1;
-
-void push(char element)
+int s[20] , top1 = -1;
+void push(char a)
 {
-    struct stack *new;
-    new=(struct stack *)malloc(sizeof(struct stack));
-    new->data=element;
-    new->next=NULL;
-    if(top==NULL)
+    struct node * newnode ;
+    newnode = ( struct node *) malloc (sizeof(struct node));
+    newnode->data = a;
+    newnode->next = NULL;
+    if(top == NULL)
     {
-        top=new;
+        top = newnode ;
     }
-    else{
-       new->next=top;
-       top=new;
+    else
+    {
+        newnode->next = top ;
+        top = newnode;
     }
 }
 char pop()
 {
-    char element; 
-    struct stack *temp;
+    char a;
+    struct node * temp;
     if(top==NULL)
     {
-        printf("stack is empty");
-    }
-    else if(top->next=NULL)
-    {
-        temp=top;
-        element=top->data;
-        top=NULL;
-        free(temp);
+        printf("stack empty\n");
     }
     else
     {
-        temp=top;
-        element=top->data;
-        top=top->next;
+        temp = top ;
+        a = top->data;
+        top = top->next;
         free(temp);
     }
-    return element;
+    return a;
 }
-int precedence(char c)
+int precedence(char a)
 {
-        if(c=='^')
-        {
+    switch(a)
+    {
+        case '^' :
             return 3;
-        }
-        else if(c=='*' || c=='/')
-        {
+        break;
+        
+        case '*' :
             return 2;
-        }
-        else
-            {
-                return 1;
-            }
-    
-    
-}  
-void push1(int n3)
+        break;
+        
+        case '/' :
+            return 2;
+        break;
+        
+        case '+' :
+            return 1;
+        break;
+        
+        case '-' :
+            return 1;
+        break;
+    }
+}
+
+void push1(int num)
 {
-top1=top1+1;
-s[top1]=n3;
+    top1++;
+    s[top1] = num;
 }
 int pop1()
 {
-int num=s[top1];
-top1--;
-return num;
+    int num;
+    num = s[top1];
+    top1--;
+    return num;
 }
-void evaluate(char postfix[20])
+
+void evaluate(char exp[])
 {
-  int i=0;
-  int result,n1,n2,n3;
-  while(postfix[i]!='\0')
-  {
-    if(isdigit(postfix[i]))
+     int i=0;
+     int op1, op2, value;
+  
+  while(exp[i] != '\0')
+   {
+     if(isdigit(exp[i]))
      {
-    n3=postfix[i]-48;
-   push1(n3);
+     push1(exp[i]-48);
+     }
+     else
+    {
+      op2 = pop1();
+      op1 = pop1();
+ 
+    switch(exp[i])
+    {
+      case '^': value = op1^op2;
+                break;  
+      case '+': value = op1 + op2;
+                break;
+      case '-':value = op1-op2;
+               break;
+     case '/':value = op1 / op2;
+              break;
+     case '*':value = op1 * op2;
+              break;
     }
-else
-{
-n1=pop();
-n2=pop1();
-  switch(postfix[i])
-{
-case '^':result=n2^n1;
-         push(result);
-         break;
-case '*':result=n2*n1;
-         push(result);
-         break;
-case '/':result=n2/n1;
-         push(result);
-         break;
-case '+':result=n2+n1;
-         push(result);
-         break;
-case '-':result=n2-n1;
-         push(result);
-         break;
+     push1(value);
   }
-  }
+ i++;
 }
-i++;
+printf("Evaluation==>%d",pop1());
 }
-prinf("Evaluation of %s is %d",postfix,pop1());
 int main()
 {
     char infix[20],postfix[20];
-    printf("Enter Infix Expression:");
+    int i = 0,j=0 ;
+    printf("Enter infix expression:");
     scanf(" %s",infix);
-    int i=0,j=0;
-    while(infix[i]!='\0')
+    while(infix[i] != '\0')
     {
         if(isalnum(infix[i]))
         {
-            postfix[j]=infix[i];
-            j++;
+            postfix[j++] = infix[i];
         }
         else
         {
             if(top==NULL)
             {
                 push(infix[i]);
-                
             }
             else
             {
-while(precedence(infix[i])<=precedence(top->data) && top!=NULL)
+                while(precedence(infix[i]) <= precedence(top->data) && top != NULL)
                 {
-                    postfix[j]=pop();
-                    j++;
+                    postfix[j++] = pop();
                 }
                 push(infix[i]);
-
-            }      
+            }
         }
-    i++;
-}    
-while(top!=NULL)
-    {
-        postfix[j]=pop();
-        j++;
+        i++;
     }
-    postfix[j++]='\0';
+    
+    while(top != NULL)
+    {
+        postfix[j++] = pop();
+    }
+    postfix[j] = '\0';
 
-printf("%s",postfix);
-
- evaluate(postfix);
-
-
-
+    printf("%s\n",postfix);
+    
+    evaluate(postfix);
     return 0;
 }
