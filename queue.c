@@ -80,8 +80,8 @@ int main()
     int ch,y;
     do{
         printf("\n1.Insert");
-        printf("\n1.Delete");
-        printf("\n1.Display");
+        printf("\n2.Delete");
+        printf("\n3.Display");
         printf("\nEnter your choice:");
         scanf("%d",&ch);
         switch(ch)
